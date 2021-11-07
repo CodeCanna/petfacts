@@ -11,7 +11,7 @@ I wrote this application to learn a python module called argparse, and this seem
 petfacts comes with an automated installer that will install petfacts, and remove it when you want it gone.
 
 ### Steps to install:
-* First clone this repo `git clone git@github.com:CodeCanna/petfacts.git`
+* First clone this repo `git clone https://github.com/CodeCanna/petfacts.git`
 * `cd` into the newly cloned directory
 * Once you are in the main petfacts directory you can run the installer `sudo ./install`; this will install petfacts
 * Done!  You can test it by either printing out the help menu, or you can display a fact!  Try running `petfacts --cat`!
