@@ -20,4 +20,4 @@ petfacts comes with an automated installer that will install petfacts, and remov
 ### Steps to uninstall:
 * `cd` back into the cloned petfacts directory or re-clone the project to give you access to the installer.
 * run `sudo ./install --uninstall` to remove petfacts.
-* (Optionally) you can use `sudo rm -f /usr/bin/petfacts to remove it manually, just be careful!!`
+* (Optionally) you can use `sudo rm -f /usr/bin/petfacts` to remove it manually, just be careful!!
