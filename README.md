@@ -21,3 +21,7 @@ petfacts comes with an automated installer that will install petfacts, and remov
 * `cd` back into the cloned petfacts directory or re-clone the project to give you access to the installer.
 * run `sudo ./install --uninstall` to remove petfacts.
 * (Optionally) you can use `sudo rm -f /usr/bin/petfacts` to remove it manually, just be careful!!
+
+### Whats next?
+* TODO: I want to get this up on PyPi so you just have to use `pip` to install.
+* TODO: Give it the ability to store facts, why?  Just because I'm learning.
