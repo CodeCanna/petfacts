@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+INSTALL_DIR=/usr/bin;
+
+if [[ $(/usr/bin/id -u) -ne 0 ]]; then
+    echo "This script must be ran as root, try sudo ./install";
+
+    exit 2;
+fi
+
+# Install the program
+function install {
+    echo "Installing petfacts";
+    if ! cp --verbose petfacts $INSTALL_DIR; then
+        echo "Couldn't install to $INSTALL_DIR";
+        return 1;
+    fi
+    return 0;
+}
+
+# Uninstall the program
+function uninstall {
+    echo "Uninstalling petfacts...";
+    if ! rm -f --verbose $INSTALL_DIR/petfacts; then
+        echo "There was a problem removing petfacts from $INSTALL_DIR, try rm -r /usr/bin/petfacts to uninstall manually.";
+
+        return 1;
+    fi
+
+    return 0;
+}
+
+function help {
+    echo "+-------------------------------------------------------------------------+";
+    echo "| Usage: install [--uninstall]                                            |"; 
+    echo "|     The installer for petfacts, can also uninstall.                     |";
+    echo "|                                                                         |";
+    echo "|     install With no args passed this will install petfacts.             |";
+    echo "|                                                                         |";
+    echo "|     --uninstall Will remove petfacts from the system.                   |";
+    echo "|                                                                         |";
+    echo "|     Example Usage:                                                      |";
+    echo "|     sudo ./install                                                      |";
+    echo "|     sudo ./install --uninstall                                          |";
+    echo "+-------------------------------------------------------------------------+";
+
+    return 0;
+}
+
+if [ $# -ne 0 ]; then
+    if [ $1 == '--uninstall' ]; then
+        if uninstall; then
+            echo "Uninstalled petfacts...";
+            exit 0;
+        fi
+    elif [ $1 == '--help' ]; then
+        help;
+        exit 0;
+    else
+        echo "Invalid arguments...";
+        help;
+        exit 2;
+    fi
+fi
+
+if install; then
+    echo "Install successfull!!";
+fi
