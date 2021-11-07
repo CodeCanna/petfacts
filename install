@@ -11,7 +11,7 @@ fi
 # Install the program
 function install {
     echo "Installing petfacts";
-    if ! cp --verbose petfacts $INSTALL_DIR; then
+    if ! cp --verbose src/petfacts $INSTALL_DIR; then
         echo "Couldn't install to $INSTALL_DIR";
         return 1;
     fi
