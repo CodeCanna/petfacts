@@ -1,8 +1,8 @@
 # About the petfacts CLI application
 Pet facts is a simple but fun application that retrieves either dog or cat facts from two different resources.
 
-(Click here)["https://catfact.ninja"] to see the cat facts api
-(Click here)["https://dog-facts-api.herokuapp.com"] to see the dog facts api
+(Click here)[https://catfact.ninja] to see the cat facts api
+(Click here)[https://dog-facts-api.herokuapp.com] to see the dog facts api
 
 ## Why did I write it?
 I wrote this application to learn a python module called argparse, and this seemed like the perfect fun project to do this with.
