@@ -2,3 +2,5 @@
 /.venv/
 pyvenv.cfg
 .vscode
+/dist/
+*.egg-info/
