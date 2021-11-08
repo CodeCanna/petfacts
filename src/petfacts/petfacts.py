@@ -3,6 +3,7 @@ import argparse
 import sys
 import requests
 import json
+import random
 
 """
 This is a simple little project to help me learn argparse, an argument parser like getopt but has a few advantages.
@@ -33,25 +34,39 @@ def dog_fact() -> str:
 
     return fact[0]['fact']
 
+# Choose a dog or cat string in an array and return it
+def random_animal() -> str:
+    animals = ['dog', 'cat']
+    return animals[random.randrange(len(animals))]
+
 def main():
     # According to https://docs.python.org/3/library/argparse.html
-
     # We create an instance of a class called ArgumentParser
     arg_parser = argparse.ArgumentParser(description='Get fun facts about pets!')
-    arg_parser.add_argument('--cat', action='store_true', default=False)
 
-    arg_parser.add_argument('--dog', action='store_true', default=False)
+    # We can then add arguments from there with a function called add_argument()
+    arg_parser.add_argument('--cat', action='store_true', default=False, help="Display a random cat fact.")
+    arg_parser.add_argument('--dog', action='store_true', default=False, help="display a random dog fact.")
 
+    # Try creating an argparse Namespace object or handle exception
     try:
         arg = arg_parser.parse_args()
     except argparse.ArgumentError as err:
         print(err)
         sys.exit(2)
 
+    # We can use if elif to go through each arg and check if its been passed
     if arg.dog:
-        print(dog_fact())
+        print(f"Random Dog Fact: {dog_fact()}")
     elif arg.cat:
-        print(cat_fact())
+        print(f"Random Cat Fact: {cat_fact()}")
+    else:
+        # Print a random cat or dog fact if no args are passed
+        if random_animal() == 'dog':
+            print(f"Random Dog Fact: {dog_fact()}")
+        else:
+            print(f"Random Cat Fact: {cat_fact()}")
+
 
 if __name__ == '__main__':
     main()
