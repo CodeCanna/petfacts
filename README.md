@@ -9,18 +9,15 @@ Pet facts is a simple but fun application that retrieves either dog or cat facts
 I wrote this application to learn a python module called argparse, and this seemed like the perfect fun project to do this with.
 
 ## How can I get it?
-petfacts comes with an automated installer that will install petfacts, and remove it when you want it gone.
+You can clone the repository on [GitHub](https://github.com/CodeCanna/petfacts) or install via `pip` by running `pip install petfacts`
 
-### Steps to install:
-* First clone this repo `git clone https://github.com/CodeCanna/petfacts.git`
-* `cd` into the newly cloned directory
-* Once you are in the main petfacts directory you can run the installer `sudo ./install`; this will install petfacts
-* Done!  You can test it by either printing out the help menu, or you can display a fact!  Try running `petfacts --cat`!
+## How to use
+This is a very simple and light program, to see a random pet fact of a dog or cat variety simply run `petfacts` with not arguments.
 
-### Steps to uninstall:
-* `cd` back into the cloned petfacts directory or re-clone the project to give you access to the installer.
-* run `sudo ./install --uninstall` to remove petfacts.
-* (Optionally) you can use `sudo rm -f /usr/bin/petfacts` to remove it manually, just be careful!!
+If you want to specify a whether you want a dog or car fact pass in the arguments like so:
+* `petfacts --cat` will return a cat fact.
+* `petfacts --dog` will return a dog fact.
+* `petfacts --help` or `petfacts -h` of course returns a help menu and exits.
 
 ### Whats next?
 * TODO: I want to get this up on PyPi so you just have to use `pip` to install.
