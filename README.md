@@ -20,5 +20,4 @@ If you want to specify a whether you want a dog or car fact pass in the argument
 * `petfacts --help` or `petfacts -h` of course returns a help menu and exits.
 
 ### Whats next?
-* TODO: I want to get this up on PyPi so you just have to use `pip` to install.
 * TODO: Give it the ability to store facts, why?  Just because I'm learning.
