@@ -4,6 +4,7 @@ import sys
 import requests
 import json
 import random
+import time
 
 """
 This is a simple little project to help me learn argparse, an argument parser like getopt but has a few advantages.
@@ -27,17 +28,25 @@ def cat_fact() -> str:
 def dog_fact() -> str:
     rsession = requests.session()
     try:
-        fact_json = rsession.get('https://dog-facts-api.herokuapp.com/api/v1/resources/dogs?number=1')
+        fact_json = rsession.get('http://dog-api.kinduff.com/api/facts?number=1')
         fact = json.loads(fact_json.text)
     except json.JSONDecodeError as err:
         print(f"Invalid repsonse recieved, got {err}")
 
-    return fact[0]['fact']
+    return fact['facts'][0]
 
 # Choose a dog or cat string in an array and return it
 def random_animal() -> str:
     animals = ['dog', 'cat']
     return animals[random.randrange(len(animals))]
+
+# Add a delay to print each character for a nice effect
+def type(string: str) -> None:
+    # loop through the string characters and print them one at a time.
+    for character in string:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.1)
 
 def main():
     # According to https://docs.python.org/3/library/argparse.html
@@ -57,15 +66,15 @@ def main():
 
     # We can use if elif to go through each arg and check if its been passed
     if arg.dog:
-        print(f"Random Dog Fact: {dog_fact()}")
+        type(f"Random Dog Fact: {dog_fact()}")
     elif arg.cat:
-        print(f"Random Cat Fact: {cat_fact()}")
+        type(f"Random Cat Fact: {cat_fact()}")
     else:
         # Print a random cat or dog fact if no args are passed
         if random_animal() == 'dog':
-            print(f"Random Dog Fact: {dog_fact()}")
+            type(f"Random Dog Fact: {dog_fact()}")
         else:
-            print(f"Random Cat Fact: {cat_fact()}")
+            type(f"Random Cat Fact: {cat_fact()}")
 
 
 if __name__ == '__main__':
