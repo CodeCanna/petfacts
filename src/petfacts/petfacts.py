@@ -55,7 +55,7 @@ def main():
 
     # We can then add arguments from there with a function called add_argument()
     arg_parser.add_argument('--cat', action='store_true', default=False, help="Display a random cat fact.")
-    arg_parser.add_argument('--dog', action='store_true', default=False, help="display a random dog fact.")
+    arg_parser.add_argument('--dog', action='store_true', default=False, help="Display a random dog fact.")
 
     # Try creating an argparse Namespace object or handle exception
     try:
