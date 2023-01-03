@@ -5,6 +5,13 @@ import requests
 import json
 import random
 import time
+import configparser
+import os
+
+from pathlib import *
+from sys import platform # For detecting the running os
+from lib.AnimalGetter import AnimalGetter
+from lib.Parser import Parser
 
 """
 This is a simple little project to help me learn argparse, an argument parser like getopt but has a few advantages.
@@ -49,6 +56,8 @@ def type(string: str) -> None:
         time.sleep(0.1)
 
 def main():
+    config = configparser.ConfigParser()
+    """
     # According to https://docs.python.org/3/library/argparse.html
     # We create an instance of a class called ArgumentParser
     arg_parser = argparse.ArgumentParser(description='Get fun facts about pets!')
@@ -75,6 +84,21 @@ def main():
             type(f"Random Dog Fact: {dog_fact()}")
         else:
             type(f"Random Cat Fact: {cat_fact()}")
+    """
+    animal_getter = AnimalGetter('dog', requests.session(), 'config.ini')
+    animal_data = animal_getter.get(configparser.ConfigParser())
+
+    print(animal_data)
+    # Check our platform
+    if platform == 'win32':
+        config.read('config.ini')
+        tmp_save_path = str(PureWindowsPath(config['tmp_paths']['win_tmp_path']))
+        print(Parser.get_win_path(tmp_save_path))
+    elif platform == 'linux' or 'linux2':
+        print("Linux")
+    elif platform == 'darwin':
+        print("Mac")
+
 
 
 if __name__ == '__main__':
