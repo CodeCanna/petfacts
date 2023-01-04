@@ -12,6 +12,7 @@ from pathlib import *
 from sys import platform # For detecting the running os
 from lib.AnimalGetter import AnimalGetter
 from lib.Parser import Parser
+from lib.CreateImage import CreateImage
 
 """
 This is a simple little project to help me learn argparse, an argument parser like getopt but has a few advantages.
@@ -85,19 +86,42 @@ def main():
         else:
             type(f"Random Cat Fact: {cat_fact()}")
     """
-    animal_getter = AnimalGetter('dog', requests.session(), 'config.ini')
+    animal_getter = AnimalGetter('cat', requests.session(), 'config.ini', True)
     animal_data = animal_getter.get(configparser.ConfigParser())
 
-    print(animal_data)
+
     # Check our platform
     if platform == 'win32':
-        config.read('config.ini')
-        tmp_save_path = str(PureWindowsPath(config['tmp_paths']['win_tmp_path']))
+        config.read('config.ini') # Read the config file
+        tmp_save_path = str(PureWindowsPath(config['tmp_paths']['win_tmp_path'])) # Get our windows path parsed and ready...oh Windows...
+        save_path = str(PureWindowsPath(config['paths']['windows_path']))
         print(Parser.get_win_path(tmp_save_path))
+
+        # Parse our paths
+        save_path_parsed = Parser.get_win_path(save_path)
+        tmp_save_path_parsed = Parser.get_win_path(tmp_save_path)
+
+        if not os.path.exists(Parser.get_win_path(tmp_save_path)):
+            os.makedirs(tmp_save_path_parsed)
+        try:
+            print(animal_data['image'])
+            print(Parser.get_extension(animal_data['image']))
+            img_bytes = requests.get(animal_data['image']).content # Get the content of the image url
+            with open(tmp_save_path_parsed + "\\tmp_img" + Parser.get_extension(animal_data['image']), 'wb') as img:
+                img.write(img_bytes)
+
+            img = CreateImage.create(animal_data['fact'], f"{tmp_save_path_parsed}\\tmp_img{Parser.get_extension(animal_data['image'])}", 15, 15)
+            CreateImage.save(f"{Parser.get_win_path(save_path_parsed)}\\image{Parser.get_extension(animal_data['image'])}", img)
+        except FileNotFoundError as err:
+            print(f"Couldn't find or create dir: {err}")
+        except OSError as err:
+            print(f"Couldn't write to path {Parser.get_win_path(tmp_save_path)}: {err}")
+            print("Make sure you have proper permissions to write to this file, on windows this script might have to be ran as Administrator!")           
     elif platform == 'linux' or 'linux2':
         print("Linux")
     elif platform == 'darwin':
         print("Mac")
+
 
 
 
