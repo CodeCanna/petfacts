@@ -13,6 +13,7 @@ from sys import platform # For detecting the running os
 from lib.AnimalGetter import AnimalGetter
 from lib.Parser import Parser
 from lib.CreateImage import CreateImage
+from lib.TextModifier import TextModifier
 
 """
 This is a simple little project to help me learn argparse, an argument parser like getopt but has a few advantages.
@@ -58,37 +59,9 @@ def type(string: str) -> None:
 
 def main():
     config = configparser.ConfigParser()
-    """
-    # According to https://docs.python.org/3/library/argparse.html
-    # We create an instance of a class called ArgumentParser
-    arg_parser = argparse.ArgumentParser(description='Get fun facts about pets!')
-
-    # We can then add arguments from there with a function called add_argument()
-    arg_parser.add_argument('--cat', action='store_true', default=False, help="Display a random cat fact.")
-    arg_parser.add_argument('--dog', action='store_true', default=False, help="Display a random dog fact.")
-
-    # Try creating an argparse Namespace object or handle exception
-    try:
-        arg = arg_parser.parse_args()
-    except argparse.ArgumentError as err:
-        print(err)
-        sys.exit(2)
-
-    # We can use if elif to go through each arg and check if its been passed
-    if arg.dog:
-        type(f"Random Dog Fact: {dog_fact()}")
-    elif arg.cat:
-        type(f"Random Cat Fact: {cat_fact()}")
-    else:
-        # Print a random cat or dog fact if no args are passed
-        if random_animal() == 'dog':
-            type(f"Random Dog Fact: {dog_fact()}")
-        else:
-            type(f"Random Cat Fact: {cat_fact()}")
-    """
-    animal_getter = AnimalGetter('cat', requests.session(), 'config.ini', True)
-    animal_data = animal_getter.get(configparser.ConfigParser())
-
+    
+    animal_getter = AnimalGetter(random_animal(), requests.session(), 'config.ini', True)
+    animal_data = animal_getter.get(config)
 
     # Check our platform
     if platform == 'win32':
@@ -110,8 +83,10 @@ def main():
             with open(tmp_save_path_parsed + "\\tmp_img" + Parser.get_extension(animal_data['image']), 'wb') as img:
                 img.write(img_bytes)
 
-            img = CreateImage.create(animal_data['fact'], f"{tmp_save_path_parsed}\\tmp_img{Parser.get_extension(animal_data['image'])}", 15, 15)
-            CreateImage.save(f"{Parser.get_win_path(save_path_parsed)}\\image{Parser.get_extension(animal_data['image'])}", img)
+
+            
+            #img = CreateImage.create(animal_data['fact'], f"{tmp_save_path_parsed}\\tmp_img{Parser.get_extension(animal_data['image'])}", 15, 15)
+            #CreateImage.save(f"{Parser.get_win_path(save_path_parsed)}\\image{Parser.get_extension(animal_data['image'])}", img)
         except FileNotFoundError as err:
             print(f"Couldn't find or create dir: {err}")
         except OSError as err:
@@ -121,9 +96,6 @@ def main():
         print("Linux")
     elif platform == 'darwin':
         print("Mac")
-
-
-
 
 if __name__ == '__main__':
     main()
