@@ -1,23 +1,24 @@
-import TextModifier
+from .TextModifier import TextModifier
 from PIL import Image, ImageDraw, ImageFont
 from pathlib import *
 
-class CreateImage:
+class CreateImage:    
     """
     text = Text to print to the image
     image = path to the tmp image to edit
-
+    xp = The percentage desired from image width
+    yp = The percentage desired from image height
     """
     @classmethod
-    def create(self, text: str, image: str, xp: float, yp: float) -> Image:
+    def create(self, text: str, image: str, x: int, y: int):# -> Image:
         with Image.open(image) as img:
             image_editted = ImageDraw.Draw(img)
             modifier = TextModifier(30) # To wrap out text on the image
-            print(img.width)
-            print(img.height)
+            text_array = modifier.modify(text)
             font = ImageFont.truetype('fonts/sans_rounded.ttf', size=30)
-            image_editted.text((x, y), text, fill=(255, 255, 255), font=font)
-
+            for line in text_array: # Loop throught the array of strings returned from TextModifier.modify()
+                y = y + 35 # Add the size of the font plus five to Y for each line.
+                image_editted.text((x, y), line, fill=(255, 255, 255), font=font)
             return img
 
     @classmethod
