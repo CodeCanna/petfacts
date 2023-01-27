@@ -13,7 +13,6 @@ from sys import platform # For detecting the running os
 from lib.AnimalGetter import AnimalGetter
 from lib.Parser import Parser
 from lib.CreateImage import CreateImage
-from lib.TextModifier import TextModifier
 
 """
 This is a simple little project to help me learn argparse, an argument parser like getopt but has a few advantages.
@@ -83,10 +82,8 @@ def main():
             with open(tmp_save_path_parsed + "\\tmp_img" + Parser.get_extension(animal_data['image']), 'wb') as img:
                 img.write(img_bytes)
 
-
-            
-            #img = CreateImage.create(animal_data['fact'], f"{tmp_save_path_parsed}\\tmp_img{Parser.get_extension(animal_data['image'])}", 15, 15)
-            #CreateImage.save(f"{Parser.get_win_path(save_path_parsed)}\\image{Parser.get_extension(animal_data['image'])}", img)
+            img = CreateImage.create(animal_data['fact'], f"{tmp_save_path_parsed}\\tmp_img{Parser.get_extension(animal_data['image'])}", 15, 15)
+            CreateImage.save(f"{Parser.get_win_path(save_path_parsed)}\\image{Parser.get_extension(animal_data['image'])}", img)
         except FileNotFoundError as err:
             print(f"Couldn't find or create dir: {err}")
         except OSError as err:
