@@ -2,7 +2,7 @@ import os.path, configparser, requests, sys, json
 from pathlib import Path
 
 class AnimalGetter:
-    def __init__(self, animal: str,  requests_obj: requests.session, config_file: os.path, with_pic: bool=False) -> None:
+    def __init__(self, animal: str,  requests_obj: requests.Session, config_file: Path, with_pic: bool=False) -> None:
         self.animal = animal
         self.with_pic = with_pic
         self.request_obj = requests_obj
@@ -10,7 +10,7 @@ class AnimalGetter:
 
     def get(self, config_parser: configparser.ConfigParser) -> dict:
         # Create a dictionary to return animal fact data
-        animal_data = {
+        animal_data: dict = {
             "animal": str,
             "fact": str,
             "image": str
