@@ -1,4 +1,4 @@
-import os
+import os, getpass
 
 class Parser:
     @classmethod
@@ -7,7 +7,8 @@ class Parser:
 
     @classmethod
     def get_linux_path(self, path: str) -> str:
-        return path.replace('$USER', os.getlogin()).strip()
+        #return path.replace('$USER', os.getlogin()).strip()
+        return path.replace('$USER', getpass.getuser()).strip()
 
     @classmethod
     def get_mac_path(self, path: str) -> str:
