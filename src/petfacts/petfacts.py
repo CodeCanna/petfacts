@@ -89,14 +89,14 @@ def run_on_linux(config: configparser.ConfigParser, animal_data: AnimalGetter):
 
     try:
         img_bytes = requests.get(animal_data['image']).content
-        with open(tmp_saved_path_parsed + "/tmp_img" + Parser.get_extension(animal_data['image']), 'wb') as img:
+        with open(tmp_save_path_parsed + "/tmp_img" + Parser.get_extension(animal_data['image']), 'wb') as img:
             img.write(img_bytes)
 
         # Create our new image
-        img = CreateImage.create(animal_data['fact'], f"{tmp_saved_path_parsed}/tmp_img{Parser.get_extension(animal_data['image'])}", 15, 15)
+        img = CreateImage.create(animal_data['fact'], f"{tmp_save_path_parsed}/tmp_img{Parser.get_extension(animal_data['image'])}", 15, 15)
 
         # Save the image to the drive
-        CreateImage.save(f"{img_saved_path_parsed}/tmp_img{Parser.get_extension(animal_data['image'])}", img)
+        CreateImage.save(f"{save_path_parsed}/tmp_img{Parser.get_extension(animal_data['image'])}", img)
     except FileNotFoundError as err:
         print(f"Couldn't find or create directory: {err}")
     except OSError as err:
