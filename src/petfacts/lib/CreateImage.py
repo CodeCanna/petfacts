@@ -10,7 +10,7 @@ class CreateImage:
     yp = The percentage desired from image height
     """
     @classmethod
-    def create(self, text: str, image: str, x: int, y: int):# -> Image:
+    def create(cls, text: str, image: str, x: int, y: int):# -> Image:
         with Image.open(image) as img:
             image_editted = ImageDraw.Draw(img)
             modifier = TextModifier(30) # To wrap out text on the image
@@ -22,7 +22,7 @@ class CreateImage:
             return img
 
     @classmethod
-    def save(self, path: str, image_to_save: Image) -> None:
+    def save(cls, path: str, image_to_save: Image.Image) -> None:
         try:
             print(path)
             image_to_save.save(path)
