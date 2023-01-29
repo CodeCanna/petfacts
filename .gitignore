@@ -9,3 +9,4 @@ pyvenv.cfg
 /Lib/
 __pycache__
 *.jpg
+/lib64/
