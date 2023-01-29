@@ -71,7 +71,37 @@ def run_on_linux(config: configparser.ConfigParser, animal_data: AnimalGetter):
 
     tmp_save_path: str = str(PurePosixPath(config['tmp_paths']['linux_tmp_path']))
     save_path: str = str(PurePosixPath(config['paths']['linux_path']))
+
+    # Parse our linux paths
+    tmp_save_path_parsed: str = Parser.get_linux_path(tmp_save_path)
+    save_path_parsed: str = Parser.get_linux_path(save_path)
     print(Parser.get_linux_path(tmp_save_path))
+
+    # If the save directory for petfacts isn't found, create it.
+    if not os.path.exists(save_path_parsed):
+        print(f"{save_path_parsed} not found creating...")
+        os.makedirs(save_path_parsed)
+
+    # If the tmp directory isnt found in the save directory create it.
+    if not os.path.exists(tmp_save_path_parsed):
+        print(f"{tmp_save_path_parsed} not found creating...")
+        os.makedirs(tmp_save_path_parsed)
+
+    try:
+        img_bytes = requests.get(animal_data['image']).content
+        with open(tmp_saved_path_parsed + "/tmp_img" + Parser.get_extension(animal_data['image']), 'wb') as img:
+            img.write(img_bytes)
+
+        # Create our new image
+        img = CreateImage.create(animal_data['fact'], f"{tmp_saved_path_parsed}/tmp_img{Parser.get_extension(animal_data['image'])}", 15, 15)
+
+        # Save the image to the drive
+        CreateImage.save(f"{img_saved_path_parsed}/tmp_img{Parser.get_extension(animal_data['image'])}", img)
+    except FileNotFoundError as err:
+        print(f"Couldn't find or create directory: {err}")
+    except OSError as err:
+        print("Couldn't write file possibly due to wrong permissions.")
+
 
 # This function runs if the program is being ran on windows
 # This function parses and saves the image and fact data based on the windows file system stucture and path.
@@ -141,7 +171,22 @@ def main():
             # Run this program for windows, handle the different file paths.
             run_on_win32(config, animal_data)
     elif platform == 'linux' or 'linux2':
-        print("Linux")
+        config_path = Path('./config.ini')
+        request_session = requests.session()
+
+        if args.noimage:
+            animal_getter = AnimalGetter(random_animal(), request_session, config_path, False)
+            animal_data = animal_getter.get(config)
+
+            fact = animal_data['fact']
+            type(fact)
+            exit(0)
+        else:
+            animal_getter = AnimalGetter(random_animal(), request_session, config_path, True)
+            animal_data = animal_getter.get(config)
+
+            run_on_linux(config, animal_data)
+            print("Linux")
     elif platform == 'darwin':
         print("Mac")
 
