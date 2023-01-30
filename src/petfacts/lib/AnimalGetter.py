@@ -28,8 +28,8 @@ class AnimalGetter:
         # Handle retrieve an image with the fact? or not?
         if self.with_pic and self.animal == 'cat':
             try:
-                cat_fact_obj = json.loads(self.request_obj.get(config_parser['urls']['cat_facts'].replace('"', '')).text)
-                cat_image_obj = json.loads(self.request_obj.get(config_parser['urls']['cat_pics'].replace('"', '')).text)
+                cat_fact_obj: dict = json.loads(self.request_obj.get(config_parser['urls']['cat_facts'].replace('"', '')).text)
+                cat_image_obj: dict = json.loads(self.request_obj.get(config_parser['urls']['cat_pics'].replace('"', '')).text)
 
                 animal_data['animal'] = 'cat'
                 animal_data['fact'] = cat_fact_obj['fact']
@@ -46,8 +46,8 @@ class AnimalGetter:
                 print(err)
         elif self.with_pic and self.animal == 'dog': # get dog fact and image
             try:
-                dog_fact_obj = json.loads(self.request_obj.get(config_parser['urls']['dog_facts'].replace('"', '')).text)
-                dog_image_obj = json.loads(self.request_obj.get(config_parser['urls']['dog_pics'].replace('"', '')).text)
+                dog_fact_obj: dict = json.loads(self.request_obj.get(config_parser['urls']['dog_facts'].replace('"', '')).text)
+                dog_image_obj: dict = json.loads(self.request_obj.get(config_parser['urls']['dog_pics'].replace('"', '')).text)
 
                 animal_data['animal'] = 'dog'
                 animal_data['fact'] = dog_fact_obj['facts'][0]
