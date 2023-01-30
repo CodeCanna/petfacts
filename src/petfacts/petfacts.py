@@ -125,7 +125,7 @@ def main():
 
     args = parser.parse_args()
 
-    # Check our platform
+    # Check our platform; is it Linux, Mac, or Windows?  I'm trying to account for different file structures on different systems.
     if platform == 'win32':
         config_path = Path('.\\config.ini')
         request_session = requests.session()
