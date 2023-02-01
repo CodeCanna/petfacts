@@ -1,19 +1,22 @@
 import os.path, configparser, requests, sys, json
 from pathlib import Path
 
-class AnimalGetter:
+class AnimalGetter(dict[str, str]):
     def __init__(self, animal: str,  requests_obj: requests.Session, config_file: Path, with_pic: bool=False) -> None:
         self.animal = animal
         self.with_pic = with_pic
         self.request_obj = requests_obj
         self.config_file = config_file
 
-    def get(self, config_parser: configparser.ConfigParser) -> dict:
+    def __getitem__(self, i):
+        return i
+
+    def get(self, config_parser: configparser.ConfigParser) -> dict[str, str]:
         # Create a dictionary to return animal fact data
         animal_data: dict = {
-            "animal": str,
-            "fact": str,
-            "image": str
+            "animal": '',
+            "fact": '',
+            "image": ''
         }
 
         # Check for config file
@@ -41,7 +44,7 @@ class AnimalGetter:
                 cat_fact_obj = json.loads(self.request_obj.get(config_parser['urls']['cat_facts'].replace('"', '')).text) #strip double quotes from string
                 animal_data['animal'] = 'cat'
                 animal_data['fact'] = cat_fact_obj['fact']
-                animal_data['image'] = None
+                animal_data['image'] = ''
             except json.JSONDecodeError as err:
                 print(err)
         elif self.with_pic and self.animal == 'dog': # get dog fact and image
@@ -60,7 +63,7 @@ class AnimalGetter:
 
                 animal_data['animal'] = 'dog'
                 animal_data['fact'] = dog_fact_obj['facts'][0]
-                animal_data['image'] = None
+                animal_data['image'] = ''
             except json.JSONDecodeError as err:
                 print(err)
         return animal_data
