@@ -30,5 +30,6 @@ class CreateImage:
                 raise(FileExistsError(f"File {_path} already exists.  Please choose another file name."))
             else:
                 image_to_save.save(Path(_path))
+                image_to_save.show()
         except FileExistsError as err:
             print(err)
