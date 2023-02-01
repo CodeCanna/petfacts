@@ -19,7 +19,7 @@ class CreateImage:
             font = ImageFont.truetype('fonts/sans_rounded.ttf', size=30)
             for line in text_array: # Loop throught the array of strings returned from TextModifier.modify()
                 y = y + 35 # Add the size of the font plus five to Y for each line.
-                image_editted.text((x, y), line, fill=(128, 128, 128), font=font)
+                image_editted.text((x, y), line, fill=(255, 255, 255), font=font)
             return img
 
     @classmethod

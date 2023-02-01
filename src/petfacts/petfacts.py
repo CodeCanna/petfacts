@@ -46,7 +46,6 @@ def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str])
     # Parse our linux paths
     tmp_save_path_parsed: str = Parser.get_linux_path(tmp_save_path)
     save_path_parsed: str = Parser.get_linux_path(save_path)
-    print(Parser.get_linux_path(tmp_save_path))
 
     # If the save directory for petfacts isn't found, create it.
     if not os.path.exists(save_path_parsed):
@@ -79,7 +78,6 @@ def run_on_win32(config: configparser.ConfigParser, animal_data: dict[str, str],
     # Get our windows path parsed and ready...oh Windows...
     tmp_save_path = str(PureWindowsPath(config['tmp_paths']['win_tmp_path']))
     save_path = str(PureWindowsPath(config['paths']['windows_path']))
-    print(Parser.get_win_path(tmp_save_path))
 
     # Parse our paths
     save_path_parsed = Parser.get_win_path(save_path)
@@ -88,8 +86,6 @@ def run_on_win32(config: configparser.ConfigParser, animal_data: dict[str, str],
     if not os.path.exists(Parser.get_win_path(tmp_save_path)):
         os.makedirs(tmp_save_path_parsed)
     try:
-        # print(animal_data['image'])
-        # print(Parser.get_extension(animal_data['image']))
         # Get the content of the image url
         img_bytes = requests.get(animal_data['image']).content
         with open(tmp_save_path_parsed + "\\tmp_img" + Parser.get_extension(animal_data['image']), 'wb') as img:
