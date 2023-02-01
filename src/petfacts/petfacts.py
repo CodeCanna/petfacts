@@ -174,8 +174,8 @@ def main():
             # Exit after typing the fact to the terminal.
             exit(0)
         elif args.noimage and args.dog:
-            animal_getter = AnimalGetter('dog', request_session, config_path, False)
-            animal_data = animal_getter.get(config)
+            animal_getter: AnimalGetter = AnimalGetter('dog', request_session, config_path, False)
+            animal_data: dict[str, str] = animal_getter.get(config)
 
             # Get the actual fact we are going to print from the returned dict from AnimalGetter.get()
             fact = animal_data['fact']
