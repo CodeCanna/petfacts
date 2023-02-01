@@ -100,7 +100,6 @@ def run_on_win32(config: configparser.ConfigParser, animal_data: dict[str, str],
     except OSError as err:
         print(f"Couldn't write to file, file either already exists or you do not have permissions to write files.")
 
-
 def main():
     # Get the config file
     config: configparser.ConfigParser = configparser.ConfigParser()
