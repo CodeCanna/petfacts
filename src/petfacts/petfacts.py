@@ -2,7 +2,6 @@
 import argparse
 import sys
 import requests
-import json
 import random
 import time
 import configparser
@@ -36,7 +35,7 @@ def type(string: str) -> None:
         time.sleep(0.1)
 
 # This function runs if petfacts is being ran on a Linux machine.
-def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str]):
+def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str], filename: str) -> None:
     config.read('config.ini')
 
     # Parse our linux paths
@@ -58,14 +57,14 @@ def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str])
         os.makedirs(tmp_save_path_parsed)
     try:
         img_bytes = requests.get(animal_data['image']).content
-        with open(tmp_save_path_parsed + "/tmp_img" + Parser.get_extension(animal_data['image']), 'wb') as img:
+        with open(tmp_save_path_parsed + f"/{filename}" + Parser.get_extension(animal_data['image']), 'wb') as img:
             img.write(img_bytes)
 
         # Create our new image
-        img = CreateImage.create(animal_data['fact'], f"{tmp_save_path_parsed}/tmp_img{Parser.get_extension(animal_data['image'])}", 15, 15)
+        img = CreateImage.create(animal_data['fact'], f"{tmp_save_path_parsed}/{filename}{Parser.get_extension(animal_data['image'])}", 15, 15)
 
         # Save the image to the drive
-        CreateImage.save(f"{save_path_parsed}/tmp_img{Parser.get_extension(animal_data['image'])}", img)
+        CreateImage.save(f"{save_path_parsed}/{filename}{Parser.get_extension(animal_data['image'])}", img)
     except FileNotFoundError as err:
         print(f"Couldn't find or create directory: {err}")
     except OSError as err:
@@ -73,7 +72,7 @@ def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str])
 
 # This function runs if the program is being ran on windows
 # This function parses and saves the image and fact data based on the windows file system stucture and path.
-def run_on_win32(config: configparser.ConfigParser, animal_data: dict[str, str], filename: str):
+def run_on_win32(config: configparser.ConfigParser, animal_data: dict[str, str], filename: str) -> None:
     config.read('config.ini')  # Read the config file
     # Get our windows path parsed and ready...oh Windows...
     tmp_save_path = str(PureWindowsPath(config['tmp_paths']['win_tmp_path']))
@@ -83,16 +82,16 @@ def run_on_win32(config: configparser.ConfigParser, animal_data: dict[str, str],
     save_path_parsed = Parser.get_win_path(save_path)
     tmp_save_path_parsed = Parser.get_win_path(tmp_save_path)
 
-    if not os.path.exists(Parser.get_win_path(tmp_save_path)):
+    if not os.path.exists(tmp_save_path_parsed):
         os.makedirs(tmp_save_path_parsed)
     try:
         # Get the content of the image url
         img_bytes = requests.get(animal_data['image']).content
-        with open(tmp_save_path_parsed + "\\tmp_img" + Parser.get_extension(animal_data['image']), 'wb') as img:
+        with open(tmp_save_path_parsed + f"\\{filename}" + Parser.get_extension(animal_data['image']), 'wb') as img:
             img.write(img_bytes)
 
         img = CreateImage.create(
-            animal_data['fact'], f"{tmp_save_path_parsed}\\tmp_img{Parser.get_extension(animal_data['image'])}", 15, 15)
+            animal_data['fact'], f"{tmp_save_path_parsed}\\{filename}{Parser.get_extension(animal_data['image'])}", 15, 15)
         CreateImage.save(
             f"{Parser.get_win_path(save_path_parsed)}\\{filename}{Parser.get_extension(animal_data['image'])}", img)
     except FileNotFoundError as err:
@@ -115,7 +114,8 @@ def main():
     parser.add_argument('--dog', action='store_true', help='Get a random dog fact with or without image.')
     parser.add_argument('--cat', action='store_true', help='Get a random cat fact with or without image.')
     parser.add_argument('--noimage', action='store_true', help='Specify that you just want a fact with no image.')
-    parser.add_argument("-s", "--saveas", help='Give the name of the image to save under without file extension.')
+    # parser.add_argument('-n', '--nosave')
+    parser.add_argument('-s', '--saveas', help='Give the name of the image to save under without file extension.')
 
     # Parse our args
     args = parser.parse_args()
@@ -130,7 +130,6 @@ def main():
 
             fact = animal_data['fact']
             type(fact)
-
             # Exit after typing the fact to the terminal.
             exit(0)
         elif args.noimage and args.dog: # Sepcify no image dog fact
@@ -141,24 +140,25 @@ def main():
             type(fact)
             # Exit after typing the fact to the terminal.
             exit(0)
-        elif args.cat:  
+        elif args.cat: # Get cat specifically
             animal_getter = AnimalGetter('cat', request_session, config_path, True)
             animal_data = animal_getter.get(config)
 
             # Run this program for windows, handle the different file paths.
             run_on_win32(config, animal_data, args.saveas)
-        elif args.dog:
+        elif args.dog: # Get dog specifically
             animal_getter = AnimalGetter('dog', request_session, config_path, True)
             animal_data = animal_getter.get(config)
 
             # Run this program for windows, handle the different file paths.
             run_on_win32(config, animal_data, args.saveas)
-        else:
+        else: # Animal not specified, choos random dog or cat
             animal_getter = AnimalGetter(random_animal(), request_session, config_path, True)
             animal_data = animal_getter.get(config)
 
             # Run this program for windows, handle the different file paths.
             run_on_win32(config, animal_data, args.saveas)
+    # If this program is being ran on linux do this
     elif platform == 'linux' or 'linux2':
         config_path = Path('./config.ini')
         request_session = requests.session()
@@ -189,18 +189,18 @@ def main():
             animal_data: dict[str, str] = animal_getter.get(config)
 
             # This funciton is called if this is ran on linux.
-            run_on_linux(config, animal_data)
+            run_on_linux(config, animal_data, args.saveas)
         elif args.dog:
             animal_getter: AnimalGetter = AnimalGetter('dog', request_session, config_path, True)
             animal_data: dict[str, str] = animal_getter.get(config)
 
             # This function is called if this is ran on linux.
-            run_on_linux(config, animal_data)
+            run_on_linux(config, animal_data, args.saveas)
         else:
             animal_getter: AnimalGetter = AnimalGetter(random_animal(), request_session, config_path, True)
             animal_data: dict[str, str] = animal_getter.get(config)
 
-            run_on_linux(config, animal_data)
+            run_on_linux(config, animal_data, args.saveas)
     elif platform == 'darwin':
         print("Mac")
 
