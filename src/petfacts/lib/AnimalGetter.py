@@ -1,7 +1,7 @@
 import os.path, configparser, requests, sys, json
 from pathlib import Path
 
-class AnimalGetter(dict[str, str]):
+class AnimalGetter():
     def __init__(self, animal: str,  requests_obj: requests.Session, config_file: Path, with_pic: bool=False) -> None:
         self.animal = animal
         self.with_pic = with_pic
