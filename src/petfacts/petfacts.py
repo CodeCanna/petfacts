@@ -72,7 +72,7 @@ def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str],
 
 # This function runs if the program is being ran on windows
 # This function parses and saves the image and fact data based on the windows file system stucture and path.
-def run_on_win32(config: configparser.ConfigParser, animal_data: dict[str, str], filename: str) -> None:
+def run_on_win32(config: configparser.ConfigParser, animal_data: dict[str, str], filename: str, nosave: bool) -> None:
     config.read('config.ini')  # Read the config file
     # Get our windows path parsed and ready...oh Windows...
     tmp_save_path = str(PureWindowsPath(config['tmp_paths']['win_tmp_path']))
@@ -90,10 +90,11 @@ def run_on_win32(config: configparser.ConfigParser, animal_data: dict[str, str],
         with open(tmp_save_path_parsed + f"\\{filename}" + Parser.get_extension(animal_data['image']), 'wb') as img:
             img.write(img_bytes)
 
-        img = CreateImage.create(
-            animal_data['fact'], f"{tmp_save_path_parsed}\\{filename}{Parser.get_extension(animal_data['image'])}", 15, 15)
-        CreateImage.save(
-            f"{Parser.get_win_path(save_path_parsed)}\\{filename}{Parser.get_extension(animal_data['image'])}", img)
+        img = CreateImage.create(animal_data['fact'], f"{tmp_save_path_parsed}\\{filename}{Parser.get_extension(animal_data['image'])}", 5, 0)
+        if nosave: # If the no save option is passed, simply display the image and exit.
+            img.show()
+            exit(0)
+        CreateImage.save(f"{Parser.get_win_path(save_path_parsed)}\\{filename}{Parser.get_extension(animal_data['image'])}", img)
     except FileNotFoundError as err:
         print(f"Couldn't find or create dir: {err}")
     except OSError as err:
@@ -114,7 +115,7 @@ def main():
     parser.add_argument('--dog', action='store_true', help='Get a random dog fact with or without image.')
     parser.add_argument('--cat', action='store_true', help='Get a random cat fact with or without image.')
     parser.add_argument('--noimage', action='store_true', help='Specify that you just want a fact with no image.')
-    # parser.add_argument('-n', '--nosave')
+    parser.add_argument('-n', '--nosave', action='store_true', help='Don\'t save the image to the disk, just display it.')
     parser.add_argument('-s', '--saveas', help='Give the name of the image to save under without file extension.')
 
     # Parse our args
@@ -145,19 +146,19 @@ def main():
             animal_data = animal_getter.get(config)
 
             # Run this program for windows, handle the different file paths.
-            run_on_win32(config, animal_data, args.saveas)
+            run_on_win32(config, animal_data, args.saveas, args.nosave)
         elif args.dog: # Get dog specifically
             animal_getter = AnimalGetter('dog', request_session, config_path, True)
             animal_data = animal_getter.get(config)
 
             # Run this program for windows, handle the different file paths.
-            run_on_win32(config, animal_data, args.saveas)
+            run_on_win32(config, animal_data, args.saveas, args.nosave)
         else: # Animal not specified, choos random dog or cat
             animal_getter = AnimalGetter(random_animal(), request_session, config_path, True)
             animal_data = animal_getter.get(config)
 
             # Run this program for windows, handle the different file paths.
-            run_on_win32(config, animal_data, args.saveas)
+            run_on_win32(config, animal_data, args.saveas, args.nosave)
     # If this program is being ran on linux do this
     elif platform == 'linux' or 'linux2':
         config_path = Path('./config.ini')
