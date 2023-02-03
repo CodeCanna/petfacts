@@ -13,7 +13,7 @@ class AnimalGetter():
 
     def get(self, config_parser: configparser.ConfigParser) -> dict[str, str]:
         # Create a dictionary to return animal fact data
-        animal_data: dict = {
+        animal_data: dict[str, str] = {
             "animal": '',
             "fact": '',
             "image": ''
