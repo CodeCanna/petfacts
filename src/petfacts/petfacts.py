@@ -35,7 +35,7 @@ def type(string: str) -> None:
         time.sleep(0.1)
 
 # This function runs if petfacts is being ran on a Linux machine.
-def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str], filename: str) -> None:
+def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str], filename: str, nosave: bool) -> None:
     config.read('config.ini')
 
     # Parse our linux paths
@@ -62,7 +62,9 @@ def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str],
 
         # Create our new image
         img = CreateImage.create(animal_data['fact'], f"{tmp_save_path_parsed}/{filename}{Parser.get_extension(animal_data['image'])}", 15, 15)
-
+        if nosave:
+            img.show()
+            exit(0)
         # Save the image to the drive
         CreateImage.save(f"{save_path_parsed}/{filename}{Parser.get_extension(animal_data['image'])}", img)
     except FileNotFoundError as err:
@@ -190,18 +192,18 @@ def main():
             animal_data: dict[str, str] = animal_getter.get(config)
 
             # This funciton is called if this is ran on linux.
-            run_on_linux(config, animal_data, args.saveas)
+            run_on_linux(config, animal_data, args.saveas, args.nosave)
         elif args.dog:
             animal_getter: AnimalGetter = AnimalGetter('dog', request_session, config_path, True)
             animal_data: dict[str, str] = animal_getter.get(config)
 
             # This function is called if this is ran on linux.
-            run_on_linux(config, animal_data, args.saveas)
+            run_on_linux(config, animal_data, args.saveas, args.nosave)
         else:
             animal_getter: AnimalGetter = AnimalGetter(random_animal(), request_session, config_path, True)
             animal_data: dict[str, str] = animal_getter.get(config)
 
-            run_on_linux(config, animal_data, args.saveas)
+            run_on_linux(config, animal_data, args.saveas, args.nosave)
     elif platform == 'darwin':
         print("Mac")
 
