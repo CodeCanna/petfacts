@@ -16,7 +16,7 @@ class CreateImage:
             image_editted = ImageDraw.Draw(img)
             modifier = TextModifier(30) # To wrap out text on the image
             text_array = modifier.modify(text)
-            font = ImageFont.truetype('fonts/sans_rounded.ttf', size=30)
+            font = ImageFont.truetype('../fonts/sans_rounded.ttf', size=30)
             for line in text_array: # Loop throught the array of strings returned from TextModifier.modify()
                 y = y + 32 # Add the size of the font plus five to Y for each line.
                 image_editted.text((x, y), line, fill=(255, 255, 255), font=font)

@@ -21,10 +21,10 @@ class AnimalGetter():
 
         # Check for config file
         try:
-            if not Path('config.ini').is_file():
+            if not Path('../config.ini').is_file():
                 raise Exception()
         except Exception:
-            print(f"Couldn't fine file {self.config_file}!")
+            print(f"Couldn't find file {self.config_file}!")
 
         config_parser.read(self.config_file) # read the config file
 

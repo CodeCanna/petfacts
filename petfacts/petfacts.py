@@ -45,21 +45,21 @@ def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str],
     # Parse our linux paths
     tmp_save_path_parsed: str = Parser.get_linux_path(tmp_save_path)
     save_path_parsed: str = Parser.get_linux_path(save_path)
-
+    # print("Beans")
     # If the save directory for petfacts isn't found, create it.
     if not os.path.exists(save_path_parsed):
         print(f"{save_path_parsed} not found creating...")
         os.makedirs(save_path_parsed)
-
+    # print("Beans")
     # If the tmp directory isnt found in the save directory create it.
     if not os.path.exists(tmp_save_path_parsed):
         print(f"{tmp_save_path_parsed} not found creating...")
         os.makedirs(tmp_save_path_parsed)
+    # print("Beans")
     try:
         img_bytes = requests.get(animal_data['image']).content
         with open(tmp_save_path_parsed + f"/{filename}" + Parser.get_extension(animal_data['image']), 'wb') as img:
             img.write(img_bytes)
-
         # Create our new image
         img = CreateImage.create(animal_data['fact'], f"{tmp_save_path_parsed}/{filename}{Parser.get_extension(animal_data['image'])}", 15, 15)
         if nosave:
@@ -70,7 +70,7 @@ def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str],
     except FileNotFoundError as err:
         print(f"Couldn't find or create directory: {err}")
     except OSError as err:
-        print("Couldn't write file possibly due to wrong permissions.")
+        print(f"Couldn't write file possibly due to wrong permissions: {err}")
 
 # This function runs if the program is being ran on windows
 # This function parses and saves the image and fact data based on the windows file system stucture and path.
@@ -163,7 +163,7 @@ def main():
             run_on_win32(config, animal_data, args.saveas, args.nosave)
     # If this program is being ran on linux do this
     elif platform == 'linux' or 'linux2':
-        config_path = Path('./config.ini')
+        config_path = Path('../config.ini')
         request_session = requests.session()
 
         if args.noimage and args.cat:
