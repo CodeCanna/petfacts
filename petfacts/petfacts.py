@@ -33,7 +33,7 @@ def type(string: str) -> None:
         sys.stdout.write(character)
         sys.stdout.flush()
         time.sleep(0.1)
-    print("")
+    print("") # Add a \n
 
 # This function runs if petfacts is being ran on a Linux machine.
 def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str], filename: str, nosave: bool) -> None:
