@@ -33,35 +33,38 @@ def type(string: str) -> None:
         sys.stdout.write(character)
         sys.stdout.flush()
         time.sleep(0.1)
+    print("")
 
 # This function runs if petfacts is being ran on a Linux machine.
 def run_on_linux(config: configparser.ConfigParser, animal_data: dict[str, str], filename: str, nosave: bool) -> None:
-    config.read('config.ini')
-
+    print("Bean")
+    config.read('../config.ini')
     # Parse our linux paths
     tmp_save_path: str = str(PurePosixPath(config['tmp_paths']['linux_tmp_path']))
     save_path: str = str(PurePosixPath(config['paths']['linux_path']))
-
     # Parse our linux paths
     tmp_save_path_parsed: str = Parser.get_linux_path(tmp_save_path)
     save_path_parsed: str = Parser.get_linux_path(save_path)
-    # print("Beans")
+    print("Bean")
     # If the save directory for petfacts isn't found, create it.
     if not os.path.exists(save_path_parsed):
         print(f"{save_path_parsed} not found creating...")
         os.makedirs(save_path_parsed)
-    # print("Beans")
+    print("Bean")
     # If the tmp directory isnt found in the save directory create it.
     if not os.path.exists(tmp_save_path_parsed):
         print(f"{tmp_save_path_parsed} not found creating...")
         os.makedirs(tmp_save_path_parsed)
-    # print("Beans")
+    print("Bean")
     try:
         img_bytes = requests.get(animal_data['image']).content
+        print("Bean")
         with open(tmp_save_path_parsed + f"/{filename}" + Parser.get_extension(animal_data['image']), 'wb') as img:
             img.write(img_bytes)
+        print("Bean")
         # Create our new image
         img = CreateImage.create(animal_data['fact'], f"{tmp_save_path_parsed}/{filename}{Parser.get_extension(animal_data['image'])}", 15, 15)
+        print("Bean")
         if nosave:
             img.show()
             exit(0)
@@ -123,6 +126,10 @@ def main():
     # Parse our args
     args = parser.parse_args()
 
+    # if args.noimage and args.cat:
+    #     config_path = Path() # Read the config file
+
+
     # Check our platform; is it Linux, Mac, or Windows?  I'm trying to account for different file structures on different systems.
     if platform == 'win32':
         config_path = Path('.\\config.ini')
@@ -172,6 +179,7 @@ def main():
 
             fact = animal_data['fact']
             type(fact)
+            print("\n")
 
             # Exit after typing the fact to the terminal.
             exit(0)
