@@ -1,6 +1,8 @@
 certifi==2022.12.7
 charset-normalizer==2.1.1
 idna==3.4
-Pillow==9.4.0
+pillow==11.3.0
 requests==2.28.1
+style==1.1.0
+update==0.0.1
 urllib3==1.26.13
